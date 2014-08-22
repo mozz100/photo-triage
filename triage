@@ -1,0 +1,101 @@
+#!/usr/bin/env node
+var photosDir = process.cwd();
+var rootDir = __dirname;
+var path = require('path'), fs = require('fs'), glob = require('glob');
+var triageFilePath = path.join(photosDir, 'ratings.json');
+
+var argv = require('minimist')(process.argv.slice(2));
+
+var photoList = [];
+if (fs.existsSync(triageFilePath)) {
+    // load file
+    allJpegs = require(triageFilePath);
+
+    // see if command args are present. Assume they aren't
+    var command = false;
+    var overwrite = false;
+    if ('less-than' in argv) {
+        allJpegs = allJpegs.filter(function(x) {
+            if (x.rating < argv['less-than']) {
+                process.stdout.write(x.fname + '\n');
+                if (argv['_'].indexOf('remove') >= 0) {
+                    // delete all files with the same base name
+                    var removeGlob = x.fname.replace(path.extname(x.fname), '.*');
+                    glob.sync(removeGlob, { nocase: true }).map(function(y) {
+                        fs.unlinkSync(y);
+                        process.stdout.write('  removed ' + y + '\n');
+                    });
+                    overwrite = true;
+                }
+                return false; // discard this entry
+            }
+            return true; // keep this entry
+        });
+        command = true;
+    }
+
+    if (command) {
+        if (overwrite) save();
+        process.exit(0);
+    }
+} else {
+    // start from all zeros
+    allJpegs = glob.sync('*.+(jpg|jpeg)', { nocase: true }).map(function(fname) {
+        return {fname: fname, rating: 0};
+    });
+}
+
+//process.exit(0);
+
+// start a static server with index.html making photos available over network
+var staticDir = path.join(rootDir , 'static');
+
+var express = require('express');
+var app = express();
+var server = app.listen(8123, function() {
+    console.log('Listening on port %d', server.address().port);
+});
+
+function save() {
+    // write 2-space indented file
+    fs.writeFileSync(triageFilePath, JSON.stringify(allJpegs, null, 2));
+    console.log('saved');
+}
+
+process.on('SIGINT', function() {
+    save();
+    process.exit(0);
+});
+
+emi = require('express-middleware-image');
+app.use(emi({
+    root: photosDir,
+    cache: '/Volumes/Storage/tmp/triage',
+    quality: 60
+}));
+
+app.use('/', express.static(staticDir));
+app.use('/photos', express.static(photosDir));
+
+app.get('/photos.json', function(req, res){
+  res.send(allJpegs);
+});
+app.post('/rate/:index/:rating', function(req, res) {
+    var index = parseInt(req.params.index);
+    var rating = parseInt(req.params.rating);
+    allJpegs[index].rating = rating;
+    // send something back
+    res.send({});
+});
+app.post('/save', function(req, res) {
+    save();
+    // send something back
+    res.send({});
+});
+app.post('/exit', function(req, res) {
+    save();
+    // send something back
+    res.send({});
+
+    process.exit(0);
+});
