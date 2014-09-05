@@ -1,2 +1,21 @@
 /* app css stylesheet */
 
+div, img, html, body {
+    padding: 0; margin: 0;
+    text-align: center;
+    background-color: black;
+}
+.photo {
+    max-width: 100%;
+    max-height: 100%; /* gets overwritten by js */
+    margin: 0 auto;
+}
+.photonext { display: none; }
+.caption {
+    height: 50px;
+    color: gray; /* fallback */
+    color: rgba(200,200,200,0.8);
+    font-family: sans-serif;
+    font-size: 20px;
+    /*background-color: rgba(100,100,100,0.5);*/
+}
