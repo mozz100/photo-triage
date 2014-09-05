@@ -1,15 +1,19 @@
 #!/usr/bin/env node
+var argv = require('minimist')(process.argv.slice(2));
+
 var photosDir = process.cwd();
+if ('photos-dir' in argv) {
+    photosDir = argv['photos-dir'];
+}
+
 var rootDir = __dirname;
 var path = require('path'), fs = require('fs'), glob = require('glob');
 var triageFilePath = path.join(photosDir, 'ratings.json');
 
-var argv = require('minimist')(process.argv.slice(2));
-
 var photoList = [];
-if (fs.existsSync(triageFilePath)) {
+if ((fs.existsSync(triageFilePath)) && !('reset' in argv)) {
     // load file
-    allJpegs = require(triageFilePath);
+    allJpegs = require('./' + triageFilePath);
 
     // see if command args are present. Assume they aren't
     var command = false;
@@ -40,8 +44,9 @@ if (fs.existsSync(triageFilePath)) {
     }
 } else {
     // start from all zeros
-    allJpegs = glob.sync('*.+(jpg|jpeg)', { nocase: true }).map(function(fname) {
-        return {fname: fname, rating: 0};
+    allJpegs = glob.sync(path.join(photosDir, '*.+(jpg|jpeg)'), { nocase: true }).map(function(fname) {
+        console.log(fname, fname.split(path.sep).slice(-1)[0]);
+        return {fname: fname.split(path.sep).slice(-1)[0], rating: 0};
     });
 }
 
@@ -52,7 +57,11 @@ var staticDir = path.join(rootDir , 'app');
 
 var express = require('express');
 var app = express();
-var server = app.listen(8123, function() {
+var port = 8123;
+if ('p' in argv) {
+    port = parseInt(argv['p']);
+}
+var server = app.listen(port, function() {
     console.log('Listening on port %d', server.address().port);
 });
 

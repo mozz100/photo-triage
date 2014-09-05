@@ -22,6 +22,11 @@ describe('my app', function() {
       expect(element(by.css('.caption')).isDisplayed()).toEqual(true);
     });
 
+    it('should render the first photo at /', function() {
+      expect(element(by.css('.photo')).isDisplayed()).toEqual(true);
+      expect(element(by.css('.caption')).getText()).toEqual('Photo 1 of 2');
+    });
+
   });
 
 

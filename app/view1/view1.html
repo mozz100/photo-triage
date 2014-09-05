@@ -1,4 +1,6 @@
-<img class="photo" ng-src=""></img>
-<img class="photonext" id="photonext1" src=""></img>
-<img class="photonext" id="photonext2" src=""></img>
-<div class="caption"/>
+<img class="photo" ng-src="{{ getPhotoURL(currentPhoto) }}"></img>
+<div class="caption">Photo {{ currentPhoto + 1 }} of {{ photos.length }}</div>
+
+<!-- preload a couple of photos with display: none -->
+<img class="photonext" ng-src="{{ getPhotoURL(currentPhoto + 1) }}"></img>
+<img class="photonext" ng-src="{{ getPhotoURL(currentPhoto + 2) }}"></img>

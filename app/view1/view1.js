@@ -9,6 +9,15 @@ angular.module('myApp.view1', ['ngRoute'])
   });
 }])
 
-.controller('View1Ctrl', [function() {
+.controller('View1Ctrl', ['$scope', '$http', function($scope, $http) {
+    $scope.currentPhoto = 0;
 
+    $http.get('/photos.json').success(function(data) {
+        $scope.photos = data;
+    });
+
+    $scope.getPhotoURL = function(num) {
+        var n = num % $scope.photos.length;
+        return '/h:' + 300 + '/' + $scope.photos[n].fname;
+    };
 }]);
