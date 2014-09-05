@@ -2,6 +2,10 @@
 
 /* https://github.com/angular/protractor/blob/master/docs/toc.md */
 
+/* Note: this runs against the app, for real, as it were - as started by 'npm start'.
+   It uses the photos in sample-photos (see package.json).
+*/
+
 describe('my app', function() {
 
   browser.get('index.html');
