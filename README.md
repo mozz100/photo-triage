@@ -12,3 +12,12 @@ triage --less-than 2        # list the chaff
 triage --less-than 2 remove # separate the wheat.  NB deletes .RAW or .CR2 files (in fact anything with same name as the jpg)
 ```
 
+## Tests
+
+```
+npm install
+npm test # or npm test-single-run
+npm run update-webdriver
+npm start & # in the background
+npm run protractor # requires java runtime
+```

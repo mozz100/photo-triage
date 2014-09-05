@@ -48,7 +48,7 @@ if (fs.existsSync(triageFilePath)) {
 //process.exit(0);
 
 // start a static server with index.html making photos available over network
-var staticDir = path.join(rootDir , 'static');
+var staticDir = path.join(rootDir , 'app');
 
 var express = require('express');
 var app = express();
