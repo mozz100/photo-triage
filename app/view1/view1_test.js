@@ -23,7 +23,7 @@ describe('myApp.view1 module', function() {
     });
 
     it('should load photos via xhr', function() {
-      expect(scope.photos).toBeUndefined();
+      expect(scope.photos).toEqual([]);
       $httpBackend.flush();
       expect(scope.photos.length).toEqual(2);
     });
@@ -32,7 +32,7 @@ describe('myApp.view1 module', function() {
       expect(scope.currentPhoto).toBe(0);
     });
 
-    // TODO tests for scope.getPhotoURL
+    // tests for scope.getPhotoURL
     it('should return correct urls for photos', function() {
       $httpBackend.flush();
       expect(scope.getPhotoURL(0)).toEqual('/h:300/IMAG0001.jpg');
@@ -40,6 +40,26 @@ describe('myApp.view1 module', function() {
 
       // check modulo arithmetic works
       expect(scope.getPhotoURL(2)).toEqual('/h:300/IMAG0001.jpg');
+    });
+
+    // tests for scope.movePhoto
+    it('should move between photos correctly', function() {
+      $httpBackend.flush();
+      expect(scope.photos.length).toEqual(2);
+      expect(scope.currentPhoto).toEqual(0);
+
+      scope.movePhoto(+1);
+      expect(scope.currentPhoto).toEqual(1);
+
+      scope.movePhoto(+1);
+      expect(scope.currentPhoto).toEqual(0);  // wraps round the end
+      
+      scope.movePhoto(-1);
+      expect(scope.currentPhoto).toEqual(1);  // wraps round zero
+      
+      scope.movePhoto(-1);
+      expect(scope.currentPhoto).toEqual(0);
+
     });
 
   });

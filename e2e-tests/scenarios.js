@@ -23,12 +23,27 @@ describe('my app', function() {
 
 
     it('should render view1 when user navigates to /', function() {
-      expect(element(by.css('.caption')).isDisplayed()).toEqual(true);
+      expect(element(by.css('.caption .info')).isDisplayed()).toEqual(true);
     });
 
     it('should render the first photo at /', function() {
       expect(element(by.css('.photo')).isDisplayed()).toEqual(true);
-      expect(element(by.css('.caption')).getText()).toEqual('Photo 1 of 2');
+      expect(element(by.css('.caption .info')).getText()).toEqual('Photo 1 of 2');
+    });
+
+    // todo tests for next/prev
+    it('should step next/prev', function() {
+      element(by.css('.next')).click();
+      expect(element(by.css('.caption .info')).getText()).toEqual('Photo 2 of 2');
+
+      element(by.css('.next')).click();
+      expect(element(by.css('.caption .info')).getText()).toEqual('Photo 1 of 2');
+
+      element(by.css('.prev')).click();
+      expect(element(by.css('.caption .info')).getText()).toEqual('Photo 2 of 2');
+
+      element(by.css('.prev')).click();
+      expect(element(by.css('.caption .info')).getText()).toEqual('Photo 1 of 2');
     });
 
   });
