@@ -25,7 +25,6 @@ angular.module('myApp.view1', ['ngRoute'])
     };
 
     $scope.movePhoto = function(delta) {
-        console.log('movePhoto', delta, ($scope.currentPhoto + delta) % $scope.photos.length);
         var newPhoto = ($scope.currentPhoto + delta) % $scope.photos.length;
         while (newPhoto < 0) {
             newPhoto += $scope.photos.length;
