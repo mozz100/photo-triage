@@ -7,6 +7,8 @@ describe('myApp.view1 module', function() {
 
   beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
     $httpBackend = _$httpBackend_;
+    $httpBackend.whenPOST('/rate').respond({});
+    $httpBackend.whenPOST('/rate/reset').respond({});
     $httpBackend.expectGET('/photos.json').
           respond([
             {"fname":"IMAG0001.jpg","rating":0},
@@ -69,18 +71,22 @@ describe('myApp.view1 module', function() {
       expect(scope.getStars()).toEqual(['star-empty star0','star-empty star1','star-empty star2']);
       
       scope.rate(1);
+      $httpBackend.flush();
       expect(scope.currentRating()).toEqual(1);
       expect(scope.getStars()).toEqual(['star star0','star-empty star1','star-empty star2']);
 
       scope.rate(3);
+      $httpBackend.flush();
       expect(scope.currentRating()).toEqual(3);
       expect(scope.getStars()).toEqual(['star star0','star star1','star star2']);
 
       scope.rate(3);  // repeating the rating resets it to zero
+      $httpBackend.flush();
       expect(scope.currentRating()).toEqual(0);
       expect(scope.getStars()).toEqual(['star-empty star0','star-empty star1','star-empty star2']);
 
       scope.rate(2);
+      $httpBackend.flush();
       expect(scope.currentRating()).toEqual(2);
 
       scope.movePhoto(+1);

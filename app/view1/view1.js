@@ -20,13 +20,13 @@ angular.module('myApp.view1', ['ngRoute'])
     $scope.getPhotoURL = function(num) {
         if ($scope.photos.length > 0) {
             var n = num % $scope.photos.length;
-            return '/h:' + 300 + '/' + $scope.photos[n].fname;            
+            return '/h:' + 300 + '/' + $scope.photos[n].fname;
         }
     };
 
     $scope.currentRating = function() {
         return $scope.photos[$scope.currentPhoto].rating;
-    }
+    };
 
     $scope.getStars = function() {
         if ($scope.photos.length > 0) {
@@ -45,9 +45,21 @@ angular.module('myApp.view1', ['ngRoute'])
     $scope.rate = function(rating) {
         var newRating = 0;
         if (rating != $scope.currentRating()) {
-            newRating = rating;    
+            newRating = rating;
         }
-        $scope.photos[$scope.currentPhoto].rating = newRating;
+        var data = { index: $scope.currentPhoto, rating: newRating };
+        $http.post('/rate', data).success(function() {
+            $scope.photos[$scope.currentPhoto].rating = newRating;
+        });
+    };
+
+    $scope.resetAllRatings = function() {
+        $http.post('/rate/reset', {}).success(function() {
+            // set all ratings to zero
+            for(var p = 0; p < $scope.photos.length; p++) {
+                $scope.photos[p].rating = 0;
+            }
+        });
     };
 
     $scope.movePhoto = function(delta) {

@@ -18,7 +18,10 @@ describe('my app', function() {
   describe('view1', function() {
 
     beforeEach(function() {
-      browser.get('index.html#/');
+      browser.get('index.html#/').then(function() {
+          element(by.css('body')).sendKeys("r");  // reset all ratings at beginning of each test
+        }
+      );
     });
 
 

@@ -53,7 +53,10 @@ if ((fs.existsSync(triageFilePath)) && !('reset' in argv)) {
 var staticDir = path.join(rootDir , 'app');
 
 var express = require('express');
+var bodyParser = require('body-parser');
+
 var app = express();
+app.use(bodyParser.json());
 var port = 8123;
 if ('p' in argv) {
     port = parseInt(argv['p']);
@@ -86,13 +89,21 @@ app.use('/photos', express.static(photosDir));
 app.get('/photos.json', function(req, res){
   res.send(allJpegs);
 });
-app.post('/rate/:index/:rating', function(req, res) {
-    var index = parseInt(req.params.index);
-    var rating = parseInt(req.params.rating);
+app.post('/rate', function(req, res) {
+    var index = parseInt(req.body.index);
+    var rating = parseInt(req.body.rating);
     allJpegs[index].rating = rating;
     // send something back
     res.send({});
 });
+app.post('/rate/reset', function(req, res) {
+    for(var index=0; index < allJpegs.length; index++) {
+        allJpegs[index].rating = 0;
+    }
+    // send something back
+    res.send({});
+});
+
 app.post('/save', function(req, res) {
     save();
     // send something back
