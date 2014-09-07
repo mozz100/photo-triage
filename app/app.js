@@ -4,7 +4,8 @@
 angular.module('myApp', [
   'ngRoute',
   'myApp.view1',
-  'myApp.version'
+  'myApp.version',
+  'ngShortcut'
 ]).
 config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/'});
