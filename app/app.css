@@ -15,5 +15,10 @@ html, body {
     height: 50px;
     color: gray; /* fallback */
     color: rgba(200,200,200,0.8);
+    font-size: 20px;
     /*background-color: rgba(100,100,100,0.5);*/
+}
+.stars {
+    color: yellow;
+    cursor: pointer;
 }

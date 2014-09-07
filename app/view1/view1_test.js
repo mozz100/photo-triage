@@ -62,5 +62,34 @@ describe('myApp.view1 module', function() {
 
     });
 
+    // tests for getStars, rate and currentRating
+    it('should get star ratings correctly', function() {
+      $httpBackend.flush();
+      expect(scope.currentRating()).toEqual(0);
+      expect(scope.getStars()).toEqual(['star-empty star0','star-empty star1','star-empty star2']);
+      
+      scope.rate(1);
+      expect(scope.currentRating()).toEqual(1);
+      expect(scope.getStars()).toEqual(['star star0','star-empty star1','star-empty star2']);
+
+      scope.rate(3);
+      expect(scope.currentRating()).toEqual(3);
+      expect(scope.getStars()).toEqual(['star star0','star star1','star star2']);
+
+      scope.rate(3);  // repeating the rating resets it to zero
+      expect(scope.currentRating()).toEqual(0);
+      expect(scope.getStars()).toEqual(['star-empty star0','star-empty star1','star-empty star2']);
+
+      scope.rate(2);
+      expect(scope.currentRating()).toEqual(2);
+
+      scope.movePhoto(+1);
+      expect(scope.currentRating()).toEqual(0);
+
+      scope.movePhoto(-1);
+      expect(scope.currentRating()).toEqual(2);
+
+    });
+
   });
 });

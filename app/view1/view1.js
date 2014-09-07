@@ -24,6 +24,32 @@ angular.module('myApp.view1', ['ngRoute'])
         }
     };
 
+    $scope.currentRating = function() {
+        return $scope.photos[$scope.currentPhoto].rating;
+    }
+
+    $scope.getStars = function() {
+        if ($scope.photos.length > 0) {
+            var stars = [];
+            for (var s=0; s<3; s++) {
+                if (s < $scope.currentRating()) {
+                    stars.push("star star"+s);  // duplicates not allowed in a repeater
+                } else {
+                    stars.push("star-empty star"+s);
+                }
+            }
+            return stars;
+        }
+    };
+
+    $scope.rate = function(rating) {
+        var newRating = 0;
+        if (rating != $scope.currentRating()) {
+            newRating = rating;    
+        }
+        $scope.photos[$scope.currentPhoto].rating = newRating;
+    };
+
     $scope.movePhoto = function(delta) {
         var newPhoto = ($scope.currentPhoto + delta) % $scope.photos.length;
         while (newPhoto < 0) {
