@@ -45,12 +45,9 @@ if ((fs.existsSync(triageFilePath)) && !('reset' in argv)) {
 } else {
     // start from all zeros
     allJpegs = glob.sync(path.join(photosDir, '*.+(jpg|jpeg)'), { nocase: true }).map(function(fname) {
-        console.log(fname, fname.split(path.sep).slice(-1)[0]);
         return {fname: fname.split(path.sep).slice(-1)[0], rating: 0};
     });
 }
-
-//process.exit(0);
 
 // start a static server with index.html making photos available over network
 var staticDir = path.join(rootDir , 'app');
