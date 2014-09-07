@@ -13,7 +13,7 @@ var triageFilePath = path.join(photosDir, 'ratings.json');
 var photoList = [];
 if ((fs.existsSync(triageFilePath)) && !('reset' in argv)) {
     // load file
-    allJpegs = require('./' + triageFilePath);
+    allJpegs = require(triageFilePath);
 
     // see if command args are present. Assume they aren't
     var command = false;
