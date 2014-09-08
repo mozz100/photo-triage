@@ -31,22 +31,22 @@ describe('my app', function() {
 
     it('should render the first photo at /', function() {
       expect(element(by.css('.photo')).isDisplayed()).toEqual(true);
-      expect(element(by.css('.caption .info')).getText()).toEqual('Photo 1 of 2');
+      expect(element(by.css('.caption .info')).getText()).toEqual('1 of 2');
     });
 
     // tests for next/prev
     it('should step next/prev', function() {
       element(by.css('.next')).click();
-      expect(element(by.css('.caption .info')).getText()).toEqual('Photo 2 of 2');
+      expect(element(by.css('.caption .info')).getText()).toEqual('2 of 2');
 
       element(by.css('.next')).click();
-      expect(element(by.css('.caption .info')).getText()).toEqual('Photo 1 of 2');
+      expect(element(by.css('.caption .info')).getText()).toEqual('1 of 2');
 
       element(by.css('.prev')).click();
-      expect(element(by.css('.caption .info')).getText()).toEqual('Photo 2 of 2');
+      expect(element(by.css('.caption .info')).getText()).toEqual('2 of 2');
 
       element(by.css('.prev')).click();
-      expect(element(by.css('.caption .info')).getText()).toEqual('Photo 1 of 2');
+      expect(element(by.css('.caption .info')).getText()).toEqual('1 of 2');
     });
 
     // tests for star clicks
@@ -72,9 +72,9 @@ describe('my app', function() {
 
     //tests for keyboard
     it('should react to keyboard', function() {
-      expect(element(by.css('.caption .info')).getText()).toEqual('Photo 1 of 2');
+      expect(element(by.css('.caption .info')).getText()).toEqual('1 of 2');
       element(by.css('body')).sendKeys(protractor.Key.ARROW_RIGHT);
-      expect(element(by.css('.caption .info')).getText()).toEqual('Photo 2 of 2');
+      expect(element(by.css('.caption .info')).getText()).toEqual('2 of 2');
       expect(element.all(by.css('.glyphicon-star')).count()).toEqual(0);
 
       element(by.css('body')).sendKeys("2");
