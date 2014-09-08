@@ -62,6 +62,11 @@ angular.module('myApp.view1', ['ngRoute'])
         });
     };
 
+    $scope.save = function() {
+        $http.post('/save', {}).success(function(data) {
+        });
+    };
+
     $scope.movePhoto = function(delta) {
         var newPhoto = ($scope.currentPhoto + delta) % $scope.photos.length;
         while (newPhoto < 0) {
