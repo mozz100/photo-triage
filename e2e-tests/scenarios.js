@@ -36,16 +36,16 @@ describe('my app', function() {
 
     // tests for next/prev
     it('should step next/prev', function() {
-      element(by.css('.next')).click();
+      element(by.css('body')).sendKeys(protractor.Key.ARROW_RIGHT);
       expect(element(by.css('.caption .info')).getText()).toEqual('2 of 2');
 
-      element(by.css('.next')).click();
+      element(by.css('body')).sendKeys(protractor.Key.ARROW_RIGHT);
       expect(element(by.css('.caption .info')).getText()).toEqual('1 of 2');
 
-      element(by.css('.prev')).click();
+      element(by.css('body')).sendKeys(protractor.Key.ARROW_LEFT);
       expect(element(by.css('.caption .info')).getText()).toEqual('2 of 2');
 
-      element(by.css('.prev')).click();
+      element(by.css('body')).sendKeys(protractor.Key.ARROW_LEFT);
       expect(element(by.css('.caption .info')).getText()).toEqual('1 of 2');
     });
 
@@ -57,14 +57,14 @@ describe('my app', function() {
       expect(element.all(by.css('.glyphicon-star')).count()).toEqual(2);
       expect(element.all(by.css('.glyphicon-star-empty')).count()).toEqual(1);
 
-      element(by.css('.next')).click();
+      element(by.css('body')).sendKeys(protractor.Key.ARROW_RIGHT);
       expect(element.all(by.css('.glyphicon-star-empty')).count()).toEqual(3);
 
       element(by.css('.star2')).click();  // equivalent to rating 3
       expect(element.all(by.css('.glyphicon-star')).count()).toEqual(3);
       expect(element.all(by.css('.glyphicon-star-empty')).count()).toEqual(0);
 
-      element(by.css('.prev')).click();
+      element(by.css('body')).sendKeys(protractor.Key.ARROW_LEFT);
       expect(element.all(by.css('.glyphicon-star')).count()).toEqual(2);
       expect(element.all(by.css('.glyphicon-star-empty')).count()).toEqual(1);
 

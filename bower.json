@@ -12,6 +12,7 @@
     "angular-mocks": "~1.2.x",
     "html5-boilerplate": "~4.3.0",
     "bootstrap": "~3.2.0",
-    "ng-shortcut": "~0.1.4"
+    "ng-shortcut": "~0.1.4",
+    "angular-touch": "~1.2.23"
   }
 }
