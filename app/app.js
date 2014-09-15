@@ -11,3 +11,8 @@ angular.module('myApp', [
 config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/'});
 }]);
+
+// prevent vertical bouncy scroll on mobile devices
+document.addEventListener("touchmove", function(event){
+    event.preventDefault();
+});

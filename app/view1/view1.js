@@ -20,7 +20,7 @@ angular.module('myApp.view1', ['ngRoute'])
     $scope.getPhotoURL = function(num) {
         if ($scope.photos.length > 0) {
             var n = num % $scope.photos.length;
-            return '/h:' + 300 + '/' + $scope.photos[n].fname;
+            return '/h:' + 800 + '/' + $scope.photos[n].fname;
         }
     };
 

@@ -37,11 +37,11 @@ describe('myApp.view1 module', function() {
     // tests for scope.getPhotoURL
     it('should return correct urls for photos', function() {
       $httpBackend.flush();
-      expect(scope.getPhotoURL(0)).toEqual('/h:300/IMAG0001.jpg');
-      expect(scope.getPhotoURL(1)).toEqual('/h:300/IMAG0002.jpg');
+      expect(scope.getPhotoURL(0)).toEqual('/h:800/IMAG0001.jpg');
+      expect(scope.getPhotoURL(1)).toEqual('/h:800/IMAG0002.jpg');
 
       // check modulo arithmetic works
-      expect(scope.getPhotoURL(2)).toEqual('/h:300/IMAG0001.jpg');
+      expect(scope.getPhotoURL(2)).toEqual('/h:800/IMAG0001.jpg');
     });
 
     // tests for scope.movePhoto

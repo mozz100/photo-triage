@@ -1,17 +1,21 @@
-<img class="photo" ng-src="{{ getPhotoURL(currentPhoto) }}" ng-swipe-left="movePhoto(+1)" ng-swipe-right="movePhoto(-1)"></img>
+<div class="photoholder"  ng-swipe-left="movePhoto(+1)" ng-swipe-right="movePhoto(-1)">
+    <img class="photo vertical-centre" ng-src="{{ getPhotoURL(currentPhoto) }}"></img>
+</div>
 <div class="caption">
-    <div class="container">
-        <a ng-click="movePhoto(-1)" class="hidden btn btn-primary prev" shortcut="37" shortcut-trigger-handler>&lt; Prev</a>
-        <span class="info">{{ currentPhoto + 1 }} of {{ photos.length }}</span>
-        <span class="rating">
+    <a ng-click="movePhoto(-1)" class="hidden btn btn-primary prev" shortcut="37" shortcut-trigger-handler>&lt; Prev</a>
+    <div class="vertical-centre">
+        <p class="info">{{ currentPhoto + 1 }} of {{ photos.length }}</p>
+        <p class="rating">
             <span style="display: none;" ng-click="rate(0)" shortcut="48" shortcut-trigger-handler></span>
             <span class="stars" ng-repeat="star in getStars()">
                 <span class="glyphicon glyphicon-{{star}}" ng-click="rate($index+1)" shortcut="{{ 49 + $index }}" shortcut-trigger-handler></span>
             </span>
-        </span>
-        <a ng-click="save()" id="save" class="btn btn-primary save" shortcut="83,115" shortcut-trigger-handler>Save</a>
-        <a ng-click="movePhoto(+1)" class="hidden btn btn-primary next" shortcut="39" shortcut-trigger-handler>Next &gt;</a>
+        </p>
+        <p>
+            <a ng-click="save()" id="save" class="btn btn-link save" shortcut="83,115" shortcut-trigger-handler>Save</a>
+        </p>
     </div>
+    <a ng-click="movePhoto(+1)" class="hidden btn btn-primary next" shortcut="39" shortcut-trigger-handler>Next &gt;</a>
 </div>
 
 <!-- invisible element with keyboard shortcut R to reset all ratings -->
