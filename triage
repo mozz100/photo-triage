@@ -1,118 +1,133 @@
 #!/usr/bin/env node
-var argv = require('minimist')(process.argv.slice(2));
 
-var photosDir = process.cwd();
+// "requires" used in this file ------------------------------------------------
+
+var path = require('path'), fs = require('fs'), glob = require('glob');
+var minimist = require('minimist');
+var express = require('express');
+var emi = require('express-middleware-image');
+var bodyParser = require('body-parser');
+
+// Parse command line args, if any ---------------------------------------------
+
+var argv = minimist(process.argv.slice(2));
+
+var photosDir = process.cwd();  // by default
 if ('photos-dir' in argv) {
     photosDir = argv['photos-dir'];
 }
+var ratingsFilePath = path.join(photosDir, 'ratings.json');
 
-var rootDir = __dirname;
-var path = require('path'), fs = require('fs'), glob = require('glob');
-var triageFilePath = path.join(photosDir, 'ratings.json');
-
-var photoList = [];
-if ((fs.existsSync(triageFilePath)) && !('reset' in argv)) {
-    // load file
-    allJpegs = require(triageFilePath);
-
-    // see if command args are present. Assume they aren't
-    var command = false;
-    var overwrite = false;
-    if ('less-than' in argv) {
-        allJpegs = allJpegs.filter(function(x) {
-            if (x.rating < argv['less-than']) {
-                process.stdout.write(x.fname + '\n');
-                if (argv['_'].indexOf('remove') >= 0) {
-                    // delete all files with the same base name
-                    var removeGlob = x.fname.replace(path.extname(x.fname), '.*');
-                    glob.sync(removeGlob, { nocase: true }).map(function(y) {
-                        fs.unlinkSync(y);
-                        process.stdout.write('  removed ' + y + '\n');
-                    });
-                    overwrite = true;
-                }
-                return false; // discard this entry
-            }
-            return true; // keep this entry
-        });
-        command = true;
-    }
-
-    if (command) {
-        if (overwrite) save();
-        process.exit(0);
-    }
-} else {
-    // start from all zeros
-    allJpegs = glob.sync(path.join(photosDir, '*.+(jpg|jpeg)'), { nocase: true }).map(function(fname) {
-        return {fname: fname.split(path.sep).slice(-1)[0], rating: 0};
-    });
-}
-
-// start a static server with index.html making photos available over network
-var staticDir = path.join(rootDir , 'app');
-
-var express = require('express');
-var bodyParser = require('body-parser');
-
-var app = express();
-app.use(bodyParser.json());
-var port = 8123;
+var port = 8123; // by default
 if ('p' in argv) {
     port = parseInt(argv['p']);
 }
-var server = app.listen(port, function() {
-    console.log('Listening on port %d', server.address().port);
-});
 
+// Load photo list -------------------------------------------------------------
+
+var allJpegs = [];
+if ((fs.existsSync(ratingsFilePath)) && !('reset' in argv)) {
+    // Load ratings file if it exists, unless --reset is passed
+    allJpegs = require(ratingsFilePath);
+
+    // If --less-than is passed...
+    if ('less-than' in argv) {
+        var rewriteRatingsFile = false;
+
+        // ...discard low-rated photos
+        allJpegs = allJpegs.filter(function(photo) {
+            if (photo.rating < argv['less-than']) {
+                
+                // output rejected photo's filename
+                process.stdout.write(photo.fname + '\n');
+
+                if (argv['_'].indexOf('remove') >= 0) {
+                    // If 'remove' is present, then delete photo
+                    // and all files with the same base name
+                    var extension = path.extname(photo.fname);
+                    var remove = photo.fname.replace(extension, '.*');
+                    glob.sync(remove, { nocase: true }).map(function(y) {
+                        fs.unlinkSync(y);
+                        process.stdout.write('  removed ' + y + '\n');
+                    });
+                    // We'll also need to overwrite the ratings.json file later
+                    rewriteRatingsFile = true;
+                }
+                return false; // discard this photo from allJpegs
+            }
+            return true; // keep this entry in allJpegs
+        });
+
+        if (rewriteRatingsFile) save();
+        process.exit(0);
+    }
+} else {
+    // Start from all zeros, load everything matching .jpg or .jpeg
+    allJpegs = glob.sync(
+        path.join(photosDir, '*.+(jpg|jpeg)'),
+        { nocase: true }
+    ).map(function(fname) {
+        return {
+            fname: fname.split(path.sep).slice(-1)[0],
+            rating: 0
+        };
+    });
+}
+
+// Save and exit functions -----------------------------------------------------
 function save() {
     // write 2-space indented file
-    fs.writeFileSync(triageFilePath, JSON.stringify(allJpegs, null, 2));
+    fs.writeFileSync(ratingsFilePath, JSON.stringify(allJpegs, null, 2));
     console.log('saved');
 }
 
-process.on('SIGINT', function() {
+function exit() {
     save();
     process.exit(0);
-});
+}
+process.on('SIGINT', exit);
 
-emi = require('express-middleware-image');
+// Express server --------------------------------------------------------------
+var app = express();
+
+// Parse JSON posted to server
+app.use(bodyParser.json());
+
+// Serve smaller images at /h:xxx/filename.jpg
 app.use(emi({
     root: photosDir,
     cache: '/Volumes/Storage/tmp/triage',
     quality: 60
 }));
 
-app.use('/', express.static(staticDir));
-app.use('/photos', express.static(photosDir));
+// Static server for the angular.js app
+app.use('/', express.static(path.join(__dirname , 'app')));
 
+// A few URLs for front/back end communications --------------------------------
 app.get('/photos.json', function(req, res){
   res.send(allJpegs);
 });
+
 app.post('/rate', function(req, res) {
     var index = parseInt(req.body.index);
     var rating = parseInt(req.body.rating);
     allJpegs[index].rating = rating;
-    // send something back
     res.send({});
 });
+
 app.post('/rate/reset', function(req, res) {
     for(var index=0; index < allJpegs.length; index++) {
         allJpegs[index].rating = 0;
     }
-    // send something back
     res.send({});
 });
 
 app.post('/save', function(req, res) {
     save();
-    // send something back
     res.send({});
 });
-app.post('/exit', function(req, res) {
-    save();
-    // send something back
-    res.send({});
 
-    process.exit(0);
+// Fire up the server ----------------------------------------------------------
+var server = app.listen(port, function() {
+    console.log('Listening on port %d', server.address().port);
 });
