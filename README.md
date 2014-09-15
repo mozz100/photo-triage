@@ -31,6 +31,9 @@ Command line parameters
                            less than that specified
 --less-than RATING remove  Remove photos with rating less than RATING.
                            Also removes all files matching the photo's name.
+--cache-dir DIR            Override the default location for the reduced-size JPGs
+                           served to browsers (default is /Volumes/Storage/tmp/triage)
+
 ```
 
 Tests

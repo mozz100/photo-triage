@@ -23,6 +23,11 @@ if ('p' in argv) {
     port = parseInt(argv['p']);
 }
 
+var cacheDir = '/Volumes/Storage/tmp/triage'; // by default
+if ('cache-dir' in argv) {
+    cacheDir = argv['cache-dir'];
+}
+
 // Load photo list -------------------------------------------------------------
 
 var allJpegs = [];
@@ -96,7 +101,7 @@ app.use(bodyParser.json());
 // Serve smaller images at /h:xxx/filename.jpg
 app.use(emi({
     root: photosDir,
-    cache: '/Volumes/Storage/tmp/triage',
+    cache: cacheDir,
     quality: 60
 }));
 
