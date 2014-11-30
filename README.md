@@ -36,6 +36,16 @@ Command line parameters
 
 ```
 
+Installing
+==========
+
+```
+npm install
+brew install imagemagick
+# Now add folder containing triage to $PATH
+# Also check cache dir
+```
+
 Tests
 =====
 
