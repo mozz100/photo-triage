@@ -21,6 +21,9 @@
 <!-- invisible element with keyboard shortcut R to reset all ratings -->
 <span style="display: none;" ng-click="resetAllRatings()" class="reset" shortcut="82,114" shortcut-trigger-handler></span>
 
+<!-- invisible element with keyboard shortcut Q to shut down the server -->
+<span style="display: none;" ng-click="killServer()" class="reset" shortcut="81,113" shortcut-trigger-handler></span>
+
 <!-- preload a couple of photos with display: none -->
 <img class="photonext" ng-src="{{ getPhotoURL(currentPhoto + 1) }}"></img>
 <img class="photonext" ng-src="{{ getPhotoURL(currentPhoto + 2) }}"></img>

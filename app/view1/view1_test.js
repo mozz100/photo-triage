@@ -8,6 +8,7 @@ describe('myApp.view1 module', function() {
   beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
     $httpBackend = _$httpBackend_;
     $httpBackend.whenPOST('/rate').respond({});
+    $httpBackend.whenPOST('/quit').respond({});
     $httpBackend.whenPOST('/rate/reset').respond({});
     $httpBackend.expectGET('/photos.json').
           respond([
@@ -62,6 +63,14 @@ describe('myApp.view1 module', function() {
       scope.movePhoto(-1);
       expect(scope.currentPhoto).toEqual(0);
 
+    });
+
+    // test for scope.killServer
+    it('should submit to /quit correctly', function() {
+      $httpBackend.flush();
+
+      scope.killServer(true);
+      $httpBackend.flush();
     });
 
     // tests for getStars, rate and currentRating

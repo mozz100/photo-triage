@@ -80,6 +80,16 @@ angular.module('myApp.view1', ['ngRoute'])
         });
     };
 
+    // Make HTTP POST to /quit.
+    // This tells the server to shut down.
+    $scope.killServer = function(skipConfirm) {
+        if (skipConfirm || confirm("Quit?")) {
+            $http.post('/quit', {}).success(function() {
+                alert("Bye bye")
+            });
+        }
+    }
+
     // Move <delta> photos through the array, wrapping back
     // around at zero/end-of-array
     $scope.movePhoto = function(delta) {
