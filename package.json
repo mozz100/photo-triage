@@ -23,7 +23,7 @@
   "dependencies": {
     "glob": "^4.0.5",
     "express": "^4.8.5",
-    "minimist": "^1.1.0",
+    "minimist": "^1.2.6",
     "express-middleware-image": "^0.0.4",
     "body-parser": "^1.8.0"
   },
