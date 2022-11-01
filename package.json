@@ -21,7 +21,7 @@
   },
   "author": "Richard Morrison",
   "dependencies": {
-    "glob": "^4.0.5",
+    "glob": "^8.0.3",
     "express": "^4.8.5",
     "minimist": "^1.1.0",
     "express-middleware-image": "^0.0.4",
