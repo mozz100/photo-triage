@@ -22,7 +22,7 @@
   "author": "Richard Morrison",
   "dependencies": {
     "glob": "^4.0.5",
-    "express": "^4.8.5",
+    "express": "^4.17.3",
     "minimist": "^1.1.0",
     "express-middleware-image": "^0.0.4",
     "body-parser": "^1.8.0"
